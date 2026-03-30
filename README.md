@@ -1,93 +1,62 @@
-# 📈 Stock Portfolio Management & Analytics System
-### *A "Bloomberg Terminal" Style Desktop Simulator*
+# dbs_project
 
----
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Java Version](https://img.shields.io/badge/Java-8%2B-orange)
+![MySQL Version](https://img.shields.io/badge/MySQL-8.0%2B-blue)
 
-## 🌟 Overview
-The **Stock Portfolio Management & Analytics System** is a sophisticated database-driven desktop application designed for real-time stock investment tracking. Built to fulfill advanced DBMS requirements, it features a robust MySQL backend with automated business logic (Triggers & Procedures) and a premium, dark-themed Java Swing frontend that simulates a professional trading terminal.
+## Table of Contents
+- [About The Project](#about-the-project)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [License](#license)
 
-## 🚀 Key Features
+## About The Project
+This project is a standalone Java desktop application designed for stock portfolio tracking and analytics. It utilizes a MySQL database to handle core financial calculations and a Swing-based graphical user interface for data visualization and transaction management. The system is built to demonstrate the integration of database automation (triggers and stored procedures) with a specialized client-side dashboard.
 
-### 💎 Premium Terminal Experience
-- **Dark Mode UI**: Professional "Bloomberg Terminal" aesthetic using a custom-styled Swing interface.
-- **Real-Time Market Simulation**: Live price fluctuations (random walk algorithm) every 5 seconds.
-- **Dynamic Charting**: A custom-rendered "Net Worth Over Time" line chart that updates in real-time.
+## Tech Stack
+- **Language**: Java 8+
+- **Database**: MySQL 8.0+
+- **Frameworks/Libraries**:
+  - Java Swing (GUI)
+  - JDBC (MySQL Connector/J)
+  - Native Graphics2D (Charting)
 
-### ⚙️ Deep Database Integration
-- **Automated Portfolio Management**: MySQL Triggers handle all balance, quantity, and average cost calculations instantly upon transaction.
-- **Performance Analytics**: Stored Procedures calculate real-time Profit/Loss based on current market volatility.
-- **ACID Compliant Transactions**: Ensures data integrity during high-frequency simulated trades.
+## Features
+- **Database-Driven Portfolio Automation**: Automatically updates held quantities, average buy prices, and total investment values through MySQL triggers whenever a transaction is recorded.
+- **Analytical Stored Procedures**: Implements logic within the database to calculate real-time profit and loss status for all held assets.
+- **Market Simulation**: A multi-threaded simulation engine that generates fluctuating market prices for 20 unique stock symbols.
+- **Real-time Visualization**: Provides a custom-rendered charting component that tracks total net worth over time.
+- **Transactional Integrity**: Supports BUY and SELL operations with verification of available cash and sufficient holdings.
+- **Dark Mode Interface**: A specialized desktop terminal layout designed for high-contrast visibility.
 
-### 📊 Portfolio Insights
-- **Live Market Feed**: Track price movements across a diverse range of top-tier stocks (RELIANCE, TCS, INFY, etc.).
-- **Trade Desk**: Seamlessly execute BUY and SELL orders with instant feedback.
-- **Top Performer Analysis**: Intelligent identification of your best-performing assets.
+## Getting Started
 
----
+### Prerequisites
+- Java Development Kit (JDK) 8 or higher.
+- MySQL Server 8.0 or higher.
+- MySQL Connector/J driver (must be placed in the `lib` folder).
 
-## 🛠️ Tech Stack
-- **Frontend**: Java Swing (Native Graphics2D for charting)
-- **Backend**: MySQL 8.0+
-- **Connectivity**: JDBC (Java Database Connectivity)
-- **Architecture**: DAO (Data Access Object) Pattern
+### Installation
+1. **Initialize Database**:
+   - Execute `db_schema.sql` to create the database structure and tables.
+   - Execute `db_logic.sql` to initialize the triggers and stored procedures.
+2. **Configure Connection**:
+   - Open `src/com/stockportfolio/util/DatabaseConnection.java`.
+   - Update the `USER` and `PASSWORD` constants to match your MySQL server configuration.
+3. **Verify Library**:
+   - Ensure a MySQL Connector `.jar` file exists within the `lib/` directory.
 
----
+## Usage
+The project includes a Windows batch script to automate compilation and execution.
 
-## 📂 Project Structure
-```text
-dbs_project/
-├── db_schema.sql        # Database tables and relationships
-├── db_logic.sql         # Triggers and Stored Procedures
-├── build_and_run.bat    # Automation script for compilation & execution
-├── lib/                 # External dependencies (MySQL Connector)
-├── src/                 # Java Source Code
-│   └── com/stockportfolio/
-│       ├── app/         # Main GUI Application
-│       ├── dao/         # Data Access Objects (SQL Logic)
-│       ├── model/       # Data Models (POJOs)
-│       └── util/        # Database Connection Utilities
-└── bin/                 # Compiled bytecode files (Auto-generated)
-```
-
----
-
-## ⚙️ Installation & Setup
-
-### 1. Prerequisites
-- **Java JDK 8 or higher** installed and added to PATH.
-- **MySQL Server** installed and running on `localhost:3306`.
-- **MySQL Connector/J**: Ensure the `.jar` file is placed in the `lib` directory.
-
-### 2. Database Initialization
-Execute the following scripts in your MySQL client to build the environment:
-1. `db_schema.sql` (Initializes tables: Users, Stocks, Portfolio, Transactions)
-2. `db_logic.sql` (Initializes Triggers for automated logic)
-
-### 3. Application Configuration
-If your MySQL credentials differ from the default (`root` / `password`), update the connection string in:
-`src/com/stockportfolio/util/DatabaseConnection.java`
-
----
-
-## 🏃 Running the Application
-The project includes a `build_and_run.bat` script specifically for Windows users to simplify the process:
-
-1. **Open the project folder** in your terminal or file explorer.
-2. **Execute the batch file**:
-   ```bash
+1. Open a terminal in the project root directory.
+2. Run the build script:
+   ```powershell
    ./build_and_run.bat
    ```
-3. The script will automatically compile all source files, link the MySQL library, and launch the terminal UI.
+The script will compile all source files into the `bin/` directory and launch the `StockPortfolioApp` class.
 
----
-
-## 🛠️ Database Schema Highlights
-- **Users**: Unique identifiers and contact info.
-- **Stocks**: Tracks ticker symbols, company names, and live market prices.
-- **Portfolio**: Aggregated view of holdings, calculated dynamically by DB triggers.
-- **Transactions**: History of all buy/sell actions with timestamping.
-
----
-
-## 📜 License
-This project is developed for academic purposes as part of a Database Management Systems laboratory project.
+## License
+Distributed under a standard license placeholder.
