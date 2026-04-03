@@ -1,62 +1,52 @@
-# dbs_project
+# DBS Project: Stock Portfolio Engine
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Java Version](https://img.shields.io/badge/Java-8%2B-orange)
 ![MySQL Version](https://img.shields.io/badge/MySQL-8.0%2B-blue)
 
-## Table of Contents
-- [About The Project](#about-the-project)
-- [Tech Stack](#tech-stack)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Usage](#usage)
-- [License](#license)
-
 ## About The Project
-This project is a standalone Java desktop application designed for stock portfolio tracking and analytics. It utilizes a MySQL database to handle core financial calculations and a Swing-based graphical user interface for data visualization and transaction management. The system is built to demonstrate the integration of database automation (triggers and stored procedures) with a specialized client-side dashboard.
+This project is an advanced, headless execution engine and dashboard for intelligent stock portfolio tracking. What began as a local desktop tool has been entirely refactored into a **Modern Web Application** powered by a highly optimized Java REST API backend connecting to a MySQL Database capable of rendering complex, institutional risk metrics natively.
+
+The platform provides users with an aesthetic, highly analytical trading dashboard built entirely under the rigid parameters of the **GitHub Dark Dimmed** UI paradigm.
 
 ## Tech Stack
-- **Language**: Java 8+
-- **Database**: MySQL 8.0+
-- **Frameworks/Libraries**:
-  - Java Swing (GUI)
-  - JDBC (MySQL Connector/J)
-  - Native Graphics2D (Charting)
+- **Backend Core**: Java (Headless HTTP REST Server)
+- **Database Engine**: MySQL 8.0+ (Stored Procedures, Advanced Triggers)
+- **Frontend Dashboard**: Vanilla HTML5, Advanced CSS3, Asynchronous JavaScript
 
-## Features
-- **Database-Driven Portfolio Automation**: Automatically updates held quantities, average buy prices, and total investment values through MySQL triggers whenever a transaction is recorded.
-- **Analytical Stored Procedures**: Implements logic within the database to calculate real-time profit and loss status for all held assets.
-- **Market Simulation**: A multi-threaded simulation engine that generates fluctuating market prices for 20 unique stock symbols.
-- **Real-time Visualization**: Provides a custom-rendered charting component that tracks total net worth over time.
-- **Transactional Integrity**: Supports BUY and SELL operations with verification of available cash and sufficient holdings.
-- **Dark Mode Interface**: A specialized desktop terminal layout designed for high-contrast visibility.
+## Core Features
+1. **GitHub Dark Aesthetic UI**: A sophisticated, strain-free dark-mode web dashboard modeled exactly after enterprise software interfaces.
+2. **"Super-Grid" Quantitative Analytics**: Features a massive 6-card layout pulling in professional statistics natively calculated by the database without stressing the JVM.
+3. **`Get_Ultimate_Analytics` Procedure**: 
+   - **Average P/E Portfolio Weighting**
+   - **Concentration Risk (%)**
+   - **Portfolio Turnover Velocity (x)**
+   - **Performance Indexing (Best/Worst Performers & ROI)**
+4. **Trigger-Based Transaction Integrity**: Pure database level automation processing trades against floating cash margins flawlessly.
 
 ## Getting Started
 
 ### Prerequisites
-- Java Development Kit (JDK) 8 or higher.
-- MySQL Server 8.0 or higher.
-- MySQL Connector/J driver (must be placed in the `lib` folder).
+- Java Development Kit (JDK) 8+
+- MySQL Server 8.0+
+- MySQL Connector/J driver (must exist in the `lib` folder)
 
 ### Installation
-1. **Initialize Database**:
-   - Execute `db_schema.sql` to create the database structure and tables.
-   - Execute `db_logic.sql` to initialize the triggers and stored procedures.
+1. **Initialize Database Structures**:
+   - Execute `db_schema.sql` to build the foundational architecture (includes new `pe_ratio` column).
+   - Execute `db_logic.sql` to initialize triggers and the unified analytical Stored Procedure.
 2. **Configure Connection**:
-   - Open `src/com/stockportfolio/util/DatabaseConnection.java`.
-   - Update the `USER` and `PASSWORD` constants to match your MySQL server configuration.
-3. **Verify Library**:
-   - Ensure a MySQL Connector `.jar` file exists within the `lib/` directory.
+   - Update `src/com/stockportfolio/util/DatabaseConnection.java` to match your local SQL root password.
 
-## Usage
-The project includes a Windows batch script to automate compilation and execution.
+## Execution
+We provide an automated compilation tool for the HTTP server:
 
-1. Open a terminal in the project root directory.
-2. Run the build script:
+1. Double click or run the batch execution interface inside your terminal:
    ```powershell
    ./build_and_run.bat
    ```
-The script will compile all source files into the `bin/` directory and launch the `StockPortfolioApp` class.
+2. The headless backend will boot on Port `8085`.
+3. Open `web_dashboard/index.html` in your modern web browser of choice, or load via `localhost:8085` to interface directly with the RESTful API endpoints.
 
 ## License
-Distributed under a standard license placeholder.
+Distributed under an Open License format.
