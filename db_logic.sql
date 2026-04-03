@@ -82,4 +82,40 @@ BEGIN
     END IF;
 END$$
 
+-- Advanced Analytics Stored Procedure
+DROP PROCEDURE IF EXISTS Get_Risk_Analytics$$
+DROP PROCEDURE IF EXISTS Get_Ultimate_Analytics$$
+
+CREATE PROCEDURE Get_Ultimate_Analytics(IN p_user_id INT)
+BEGIN
+    DECLARE v_total_invested DECIMAL(15,2);
+    DECLARE v_total_portfolio DECIMAL(15,2);
+    DECLARE v_largest_asset_val DECIMAL(15,2);
+    DECLARE v_total_buy_vol DECIMAL(15,2);
+
+    -- Base aggregates
+    SELECT IFNULL(SUM(total_investment), 0), IFNULL(SUM(current_value), 0)
+    INTO v_total_invested, v_total_portfolio
+    FROM Portfolio WHERE user_id = p_user_id;
+
+    -- Largest asset
+    SELECT IFNULL(MAX(current_value), 0) INTO v_largest_asset_val
+    FROM Portfolio WHERE user_id = p_user_id;
+
+    -- Turnover
+    SELECT IFNULL(SUM(quantity * price_per_share), 0) INTO v_total_buy_vol
+    FROM Transactions WHERE user_id = p_user_id AND transaction_type = 'BUY';
+
+    -- Output JSON mapping targets
+    SELECT 
+        (SELECT stock_symbol FROM Portfolio WHERE user_id = p_user_id ORDER BY profit_loss DESC LIMIT 1) as best_stock,
+        (SELECT MAX(profit_loss) FROM Portfolio WHERE user_id = p_user_id) as best_profit,
+        (SELECT stock_symbol FROM Portfolio WHERE user_id = p_user_id ORDER BY profit_loss ASC LIMIT 1) as worst_stock,
+        (SELECT MIN(profit_loss) FROM Portfolio WHERE user_id = p_user_id) as worst_profit,
+        CASE WHEN v_total_portfolio > 0 THEN ROUND((v_largest_asset_val / v_total_portfolio) * 100, 2) ELSE 0 END as concentration_risk_pct,
+        CASE WHEN v_total_portfolio > 0 THEN ROUND((v_total_buy_vol / v_total_portfolio), 2) ELSE 0 END as turnover_ratio,
+        CASE WHEN v_total_invested > 0 THEN ROUND(((v_total_portfolio - v_total_invested) / v_total_invested) * 100, 2) ELSE 0 END as roi_pct,
+        (SELECT ROUND(AVG(s.pe_ratio), 2) FROM Portfolio p JOIN Stocks s ON p.stock_symbol = s.stock_symbol WHERE p.user_id = p_user_id) as avg_pe_ratio;
+END$$
+
 DELIMITER ;

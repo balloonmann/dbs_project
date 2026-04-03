@@ -3,6 +3,7 @@ package com.stockportfolio.app;
 import com.stockportfolio.dao.*;
 import com.stockportfolio.model.*;
 import com.stockportfolio.util.DatabaseConnection;
+import com.stockportfolio.api.WebServer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -453,8 +454,11 @@ public class StockPortfolioApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new StockPortfolioApp().setVisible(true);
-        });
+        System.out.println("Starting Headless Web Server Backend...");
+        WebServer.start();
+        
+        StockPortfolioApp app = new StockPortfolioApp();
+        // Hide the GUI but still run the background market simulation timers!
+        app.setVisible(false);
     }
 }

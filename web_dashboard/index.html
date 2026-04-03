@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation & Watchlist -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2 style="color: var(--accent-primary); font-weight: 800; font-size: 1.4rem;">DBS PROJECT</h2>
+            </div>
+
+            <nav class="side-nav">
+                <a href="#" class="nav-item active" data-target="view-dashboard">Dashboard</a>
+                <a href="#" class="nav-item" data-target="view-analytics">Analytics</a>
+                <a href="#" class="nav-item">Trading</a>
+                <a href="#" class="nav-item">Settings</a>
+            </nav>
+
+            <div class="watchlist glass-panel">
+                <h3>Watchlist</h3>
+                <ul class="watch-list-items" id="ui-watchlist">
+                    <li>
+                        <span class="ticker">GOOGL</span>
+                        <span class="trend pos">+$12.40</span>
+                    </li>
+                    <li>
+                        <span class="ticker">AMZN</span>
+                        <span class="trend neg">-$4.30</span>
+                    </li>
+                    <li>
+                        <span class="ticker">MSFT</span>
+                        <span class="trend pos">+$8.15</span>
+                    </li>
+                    <li>
+                        <span class="ticker">NVDA</span>
+                        <span class="trend pos">+$45.20</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- Top Navigation & Filters -->
+            <header class="top-header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for stocks, ETFs, or crypto..." id="global-search">
+                </div>
+                <div class="ui-filters">
+                    <span style="font-weight: 600; font-size: 1rem; color: var(--accent-secondary);">LIVE MARKET</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="avatar">H</div>
+                    <span class="user-name">Harshit</span>
+                </div>
+            </header>
+
+            <div id="view-dashboard" class="view-section active">
+                <!-- Hero Overview Section -->
+                <section class="overview-grid">
+                <div class="card glass-panel hero-card">
+                    <h4>Total Portfolio Value</h4>
+                    <div class="value-container">
+                        <h1 class="total-value" id="ui-total-value">$142,854.20</h1>
+                        <span class="pulse-indicator">Live</span>
+                    </div>
+                </div>
+
+                <div class="card glass-panel stat-card">
+                    <h4>Total Gain/Loss</h4>
+                    <h2 class="gain-value pos" id="ui-total-gain">+ $12,450.80 <small>(+9.5%)</small></h2>
+                </div>
+
+                <div class="card glass-panel flex-card">
+                    <h4>Top Allocation</h4>
+                    <div class="allocation-chart simulates-chart">
+                        <div class="bar-aapl" style="width: 50%; background-color: var(--accent-primary);"></div>
+                        <div class="bar-tsla" style="width: 50%; background-color: var(--text-muted);"></div>
+                    </div>
+                    <div class="allocation-legend">
+                        <span><span class="dot aapl-color"></span> Active Investments</span>
+                        <span><span class="dot other-color"></span> Cash Reserve</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="bottom-grid">
+                <!-- Portfolio Table -->
+                <section class="portfolio-section glass-panel">
+                    <div class="section-header">
+                        <h3>Your Holdings</h3>
+                        <div class="table-actions">
+                            <button class="btn-sort" type="button">Sort By Value ↓</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="portfolio-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company Name</th>
+                                    <th>Quantity</th>
+                                    <th>Buy Price</th>
+                                    <th>Current Price</th>
+                                    <th>% Change</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ui-portfolio-body">
+                                <tr><td colspan="6" style="text-align: center;">Loading portfolio...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="side-forms">
+                    <!-- Add Stock Form (Visual Interactive States) -->
+                    <section class="form-section glass-panel">
+                        <h3>Quick Trade</h3>
+                        <form class="add-stock-form" id="ui-trade-form" action="#">
+                            <div class="input-group">
+                                <select id="trade-ticker" required style="padding-top:16px;">
+                                    <option value="" disabled selected>Select an Indian Stock...</option>
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="input-group">
+                                    <input type="number" id="trade-qty" min="1" required placeholder=" ">
+                                    <label for="trade-qty">Quantity</label>
+                                </div>
+                                <div class="input-group half">
+                                    <select id="trade-type" required>
+                                        <option value="buy">Buy</option>
+                                        <option value="sell">Sell</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Execute Trade <span class="arrow">→</span></button>
+                        </form>
+                    </section>
+
+                    <!-- Transaction History -->
+                    <section class="history-section glass-panel">
+                        <h3>Recent Transactions</h3>
+                        <ul class="history-list" id="ui-history">
+                            <li class="history-item buy-action">
+                                <div class="hist-icon">↓</div>
+                                <div class="hist-details">
+                                    <strong>Bought AAPL</strong>
+                                    <span>May 14, 2023 - 50 Shares</span>
+                                </div>
+                                <div class="hist-price">-$7,250.00</div>
+                            </li>
+                            <li class="history-item sell-action">
+                                <div class="hist-icon">↑</div>
+                                <div class="hist-details">
+                                    <strong>Sold TSLA</strong>
+                                    <span>May 10, 2023 - 20 Shares</span>
+                                </div>
+                                <div class="hist-price">+$4,600.00</div>
+                            </li>
+                            <li class="history-item buy-action">
+                                <div class="hist-icon">↓</div>
+                                <div class="hist-details">
+                                    <strong>Bought MSFT</strong>
+                                    <span>May 02, 2023 - 60 Shares</span>
+                                </div>
+                                <div class="hist-price">-$18,600.00</div>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+            </div> <!-- End view-dashboard -->
+
+            <div id="view-analytics" class="view-section hidden">
+                <div class="card glass-panel" style="margin-bottom: 24px;">
+                    <h2>Full Portfolio Analytics</h2>
+                    <p>Live metrics dynamically calculated by the MySQL Stored Procedure.</p>
+                </div>
+                <div class="overview-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card glass-panel stat-card">
+                        <h4>Top Performing Asset</h4>
+                        <h2 class="gain-value pos" id="ui-top-performer">N/A</h2>
+                    </div>
+                    <div class="card glass-panel stat-card">
+                        <h4>Worst Performing Asset</h4>
+                        <h2 class="gain-value neg" id="ui-worst-performer">N/A</h2>
+                    </div>
+                    <div class="card glass-panel stat-card">
+                        <h4>Average P/E Ratio</h4>
+                        <h2 class="gain-value" id="ui-avg-pe" style="color: var(--text-main);">0.0x</h2>
+                    </div>
+                    <div class="card glass-panel stat-card">
+                        <h4>Concentration Risk</h4>
+                        <h2 class="gain-value" id="ui-concentration-risk" style="color: var(--text-main);">0.00%</h2>
+                    </div>
+                    <div class="card glass-panel text-center">
+                        <h4>Overall Return On Investment</h4>
+                        <h2 class="gain-value" id="ui-portfolio-roi" style="color: var(--text-main);">0.00%</h2>
+                    </div>
+                    <div class="card glass-panel text-center">
+                        <h4>Portfolio Turnover</h4>
+                        <h2 class="gain-value" id="ui-turnover-ratio" style="color: var(--text-main);">0.00x</h2>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

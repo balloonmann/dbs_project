@@ -1,0 +1,546 @@
+/* =========================================================================
+   AuraFinance - Core Stylesheet (Pure HTML/CSS)
+   ========================================================================= */
+
+/* --- 1. Design Tokens (CSS Variables) --- */
+:root {
+    --bg-dark: #0B0F14;
+    --bg-panel: #121821;
+    --accent-primary: #2F81F7;
+    --accent-secondary: #1F6FEB;
+    --accent-glow: rgba(47, 129, 247, 0.2);
+    /* Text */
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --text-main: #E6EDF3;
+    --text-muted: #8B949E;
+    /* Status */
+    --pos-green: #2EA043;
+    --pos-green-bg: rgba(46, 160, 67, 0.15);
+    --neg-red: #DA3633;
+    --neg-red-bg: rgba(218, 54, 51, 0.15);
+    /* Borders */
+    --border-color: #21262D;
+    --border-glass: #21262D;
+    
+    /* Layout */
+    --sidebar-width: 260px;
+    --border-radius: 16px;
+    --border-radius-sm: 8px;
+    --transition-snappy: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- 2. Global Resets & Typography --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Soft ambient background gradients */
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- 3. Glassmorphism Utilities --- */
+.glass-panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    transition: transform var(--transition-snappy), border-color var(--transition-snappy), box-shadow var(--transition-smooth);
+}
+
+.glass-panel:hover {
+    border-color: var(--border-glass-hover);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 4. Main Layout --- */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    border-right: 1px solid var(--border-glass);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    background: rgba(15, 17, 26, 0.4);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--accent-primary), #8b5cf6);
+    border-radius: 8px;
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item {
+    padding: 12px 16px;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-secondary);
+    transition: all var(--transition-snappy);
+    font-weight: 500;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-primary);
+    position: relative;
+}
+
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;
+    width: 3px;
+    background: var(--accent-primary);
+    border-radius: 0 4px 4px 0;
+}
+
+/* Watchlist */
+.watchlist {
+    margin-top: auto;
+    padding: 20px;
+}
+.watchlist h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+.watch-list-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.watch-list-items li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+.watch-list-items .ticker {
+    font-weight: 600;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    padding: 32px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Top Header */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 30px;
+    width: 300px;
+    font-family: inherit;
+    transition: all var(--transition-snappy);
+}
+.search-bar input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.ui-filters select {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* --- SPA View Switching --- */
+.view-section {
+    animation: fadeIn 0.4s ease-out;
+}
+.view-section.hidden {
+    display: none;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 5. Hero Overview Grid --- */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card h4 {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.total-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #ffffff, #94a3b8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gain-value {
+    font-size: 2rem;
+}
+.gain-value small {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Simulated Live Pulse */
+.value-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.pulse-indicator {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--pos-green);
+    background: var(--pos-green-bg);
+    padding: 4px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Allocation Bar Chart (Pure CSS) */
+.allocation-chart {
+    height: 12px;
+    width: 100%;
+    border-radius: 6px;
+    display: flex;
+    overflow: hidden;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.bar-aapl { background: var(--accent-primary); }
+.bar-tsla { background: var(--neg-red); }
+.bar-other { background: var(--text-muted); }
+
+.allocation-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+.allocation-legend .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+.aapl-color { background-color: var(--accent-primary); }
+.tsla-color { background-color: var(--neg-red); }
+.other-color { background-color: var(--text-muted); }
+
+/* --- 6. Bottom Grid (Table & Side Forms) --- */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+/* Portfolio Table */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.btn-sort {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+.btn-sort:hover { color: var(--text-primary); }
+
+.portfolio-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.portfolio-table th {
+    text-align: left;
+    padding: 16px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+}
+.portfolio-table td {
+    padding: 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+}
+.portfolio-table tbody tr {
+    transition: background var(--transition-snappy);
+}
+.portfolio-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.ticker-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+/* Typography Helpers */
+.pos { color: var(--pos-green); }
+.neg { color: var(--neg-red); }
+.pos-bg { color: var(--pos-green); background: var(--pos-green-bg); }
+.neg-bg { color: var(--neg-red); background: var(--neg-red-bg); }
+
+/* --- 7. Sidebar Forms/History --- */
+.side-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Form Styles (Interactive Placeholder Strategy) */
+.add-stock-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+.row {
+    display: flex;
+    gap: 12px;
+}
+.input-group {
+    position: relative;
+    flex: 1;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--border-radius-sm);
+    padding: 16px 16px 8px 16px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color var(--transition-snappy);
+}
+.input-group select {
+    padding: 13px 16px;
+}
+
+/* The CSS Magic for Floating Labels */
+.input-group label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+}
+
+/* When input is focused, OR when it is NOT showing placeholder (meaning it has text) */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: 8px;
+    font-size: 0.7rem;
+    color: var(--accent-primary);
+}
+
+.input-group input:focus, .input-group select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+/* Submit Button */
+.btn-primary {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: var(--border-radius-sm);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--transition-snappy);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+.btn-primary .arrow {
+    transition: transform var(--transition-snappy);
+}
+.btn-primary:hover .arrow {
+    transform: translateX(4px);
+}
+
+/* History List */
+.history-list {
+    list-style: none;
+    margin-top: 20px;
+}
+.history-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-glass);
+}
+.history-item:last-child {
+    border-bottom: none;
+}
+.hist-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 16px;
+}
+.buy-action .hist-icon {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    border: 1px solid var(--border-glass);
+}
+.sell-action .hist-icon {
+    background: var(--pos-green-bg);
+    color: var(--pos-green);
+}
+.hist-details {
+    display: flex;
+    flex-direction: column;
+}
+.hist-details strong {
+    font-size: 0.95rem;
+}
+.hist-details span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.hist-price {
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
