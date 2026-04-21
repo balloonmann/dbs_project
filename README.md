@@ -1,9 +1,5 @@
 # DBS Project: Stock Portfolio Engine
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Java Version](https://img.shields.io/badge/Java-8%2B-orange)
-![MySQL Version](https://img.shields.io/badge/MySQL-8.0%2B-blue)
-
 ## About The Project
 This project is an advanced, headless execution engine and dashboard for intelligent stock portfolio tracking. What began as a local desktop tool has been entirely refactored into a **Modern Web Application** powered by a highly optimized Java REST API backend connecting to a MySQL Database capable of rendering complex, institutional risk metrics natively.
 
