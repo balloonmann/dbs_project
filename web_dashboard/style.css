@@ -544,3 +544,100 @@ a {
     font-weight: 600;
     font-size: 0.95rem;
 }
+
+/* User Management Styles */
+.user-dropdown {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 12px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.user-dropdown:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.user-dropdown option {
+    background: #0f172a;
+    color: var(--text-main);
+}
+
+.btn-icon-plus {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.btn-icon-plus:hover {
+    transform: scale(1.1);
+    background: var(--accent-secondary);
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 450px;
+    padding: 32px;
+    position: relative;
+    animation: modalPop 0.3s ease-out;
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.close-modal {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 1.8rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--accent-primary);
+}
+
+#create-user-form .input-group {
+    margin-bottom: 20px;
+}

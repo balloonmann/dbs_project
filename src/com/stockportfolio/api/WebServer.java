@@ -25,6 +25,7 @@ public class WebServer {
             server.createContext("/api/market", new ApiHandler.MarketHandler());
             server.createContext("/api/history", new ApiHandler.HistoryHandler());
             server.createContext("/api/analytics", new ApiHandler.AnalyticsHandler());
+            server.createContext("/api/users", new ApiHandler.UserHandler());
 
             // Static Files
             server.createContext("/", new StaticFileHandler());

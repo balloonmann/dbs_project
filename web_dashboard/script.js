@@ -5,13 +5,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const uiWatchlist = document.getElementById('ui-watchlist');
     const uiHistory = document.getElementById('ui-history');
     const uiTradeForm = document.getElementById('ui-trade-form');
+    const userSelector = document.getElementById('user-selector');
+    const btnNewUser = document.getElementById('btn-new-user');
+    const userModal = document.getElementById('user-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const createUserForm = document.getElementById('create-user-form');
+    const currentUserAvatar = document.getElementById('current-user-avatar');
+
+    let currentUserId = parseInt(localStorage.getItem('currentUserId')) || 1;
 
     const formatCurrency = (val) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
     const formatPercent = (val) => (val > 0 ? '+' : '') + val.toFixed(2) + '%';
 
+    const fetchUsers = async () => {
+        try {
+            const res = await fetch('/api/users');
+            if(!res.ok) return;
+            const users = await res.json();
+            
+            let html = '';
+            users.forEach(user => {
+                html += `<option value="${user.userId}" ${user.userId === currentUserId ? 'selected' : ''}>${user.username}</option>`;
+                if (user.userId === currentUserId) {
+                    currentUserAvatar.innerText = user.username.charAt(0).toUpperCase();
+                }
+            });
+            if (userSelector) userSelector.innerHTML = html;
+            
+            // If current user is not in the list (e.g. database reset), default to first user
+            if (users.length > 0 && !users.find(u => u.userId === currentUserId)) {
+                currentUserId = users[0].userId;
+                localStorage.setItem('currentUserId', currentUserId);
+                refreshAllData();
+            }
+        } catch (e) { console.error('Failed to fetch users', e); }
+    };
+
+    const refreshAllData = () => {
+        fetchPortfolio();
+        fetchMarket();
+        fetchHistory();
+        if (document.getElementById('view-analytics').classList.contains('active') || !document.getElementById('view-analytics').classList.contains('hidden')) {
+            fetchAnalytics();
+        }
+    };
+
     const fetchPortfolio = async () => {
         try {
-            const res = await fetch('/api/portfolio');
+            const res = await fetch(`/api/portfolio?userId=${currentUserId}`);
             if(!res.ok) return;
             const data = await res.json();
             
@@ -89,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchHistory = async () => {
         try {
-            const res = await fetch('/api/history');
+            const res = await fetch(`/api/history?userId=${currentUserId}`);
             if(!res.ok) return;
             const data = await res.json();
             
@@ -124,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const res = await fetch('/api/trade', {
+                const res = await fetch(`/api/trade?userId=${currentUserId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ticker, qty, type })
@@ -166,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchAnalytics = async () => {
         try {
-            const res = await fetch('/api/analytics');
+            const res = await fetch(`/api/analytics?userId=${currentUserId}`);
             if(!res.ok) return;
             const data = await res.json();
             
@@ -192,6 +233,57 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (e) { console.error('Failed to fetch analytics', e); }
     };
 
+    // User Event Listeners
+    if (userSelector) {
+        userSelector.addEventListener('change', (e) => {
+            currentUserId = parseInt(e.target.value);
+            localStorage.setItem('currentUserId', currentUserId);
+            const selectedText = userSelector.options[userSelector.selectedIndex].text;
+            currentUserAvatar.innerText = selectedText.charAt(0).toUpperCase();
+            refreshAllData();
+        });
+    }
+
+    if (btnNewUser) {
+        btnNewUser.addEventListener('click', () => userModal.classList.remove('hidden'));
+    }
+
+    if (closeModal) {
+        closeModal.addEventListener('click', () => userModal.classList.add('hidden'));
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === userModal) userModal.classList.add('hidden');
+    });
+
+    if (createUserForm) {
+        createUserForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const email = document.getElementById('new-email').value;
+            const phone = document.getElementById('new-phone').value;
+
+            try {
+                const res = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, phone })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    userModal.classList.add('hidden');
+                    createUserForm.reset();
+                    fetchUsers();
+                } else {
+                    alert('Failed to create user: ' + (data.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Network error while creating user');
+            }
+        });
+    }
+
     // Start live updates matching the 4 second Java Simulation
     setInterval(() => {
         fetchPortfolio();
@@ -199,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
 
     // Initial load
+    fetchUsers();
     fetchPortfolio();
     fetchMarket();
     fetchHistory();

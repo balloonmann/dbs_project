@@ -15,11 +15,27 @@ import java.util.List;
 
 public class ApiHandler {
     private static final Gson gson = new Gson();
-    private static final int MOCK_USER_ID = 1; // Assuming 1 for the demo session
-    
+    private static final UserDAO userDAO = new UserDAO();
     private static final PortfolioDAO portfolioDAO = new PortfolioDAO();
     private static final TransactionDAO transactionDAO = new TransactionDAO();
     private static final StockDAO stockDAO = new StockDAO();
+
+    private static int getUserId(HttpExchange exchange) {
+        String query = exchange.getRequestURI().getQuery();
+        if (query != null) {
+            for (String param : query.split("&")) {
+                String[] pair = param.split("=");
+                if (pair.length > 1 && pair[0].equals("userId")) {
+                    try {
+                        return Integer.parseInt(pair[1]);
+                    } catch (NumberFormatException e) {
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 1; // Default to 1
+    }
 
     private static void sendJsonResponse(HttpExchange exchange, int statusCode, Object data) throws IOException {
         String json = gson.toJson(data);
@@ -37,7 +53,8 @@ public class ApiHandler {
         public void handle(HttpExchange exchange) throws IOException {
             if ("GET".equals(exchange.getRequestMethod())) {
                 try {
-                    List<PortfolioItem> portfolio = portfolioDAO.getPortfolioByUserId(MOCK_USER_ID);
+                    int userId = getUserId(exchange);
+                    List<PortfolioItem> portfolio = portfolioDAO.getPortfolioByUserId(userId);
                     sendJsonResponse(exchange, 200, portfolio);
                 } catch(Exception e) {
                     sendJsonResponse(exchange, 500, e.getMessage());
@@ -61,9 +78,37 @@ public class ApiHandler {
     public static class HistoryHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            if ("GET".equals(exchange.getRequestMethod())) {
-                List<Transaction> transactions = transactionDAO.getTransactionsByUserId(MOCK_USER_ID);
+                int userId = getUserId(exchange);
+                List<Transaction> transactions = transactionDAO.getTransactionsByUserId(userId);
                 sendJsonResponse(exchange, 200, transactions);
+            }
+        }
+
+    public static class UserHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if ("GET".equals(exchange.getRequestMethod())) {
+                List<User> users = userDAO.getAllUsers();
+                sendJsonResponse(exchange, 200, users);
+            } else if ("POST".equals(exchange.getRequestMethod())) {
+                try {
+                    JsonObject req = JsonParser.parseReader(new InputStreamReader(exchange.getRequestBody())).getAsJsonObject();
+                    User user = new User();
+                    user.setUsername(req.get("username").getAsString());
+                    user.setEmail(req.get("email").getAsString());
+                    user.setPhone(req.get("phone").getAsString());
+                    
+                    boolean success = userDAO.addUser(user);
+                    JsonObject res = new JsonObject();
+                    res.addProperty("success", success);
+                    sendJsonResponse(exchange, 200, res);
+                } catch (Exception e) {
+                    JsonObject res = new JsonObject();
+                    res.addProperty("error", e.getMessage());
+                    sendJsonResponse(exchange, 500, res);
+                }
+            } else {
+                exchange.sendResponseHeaders(405, -1);
             }
         }
     }
@@ -73,7 +118,8 @@ public class ApiHandler {
         public void handle(HttpExchange exchange) throws IOException {
             if ("GET".equals(exchange.getRequestMethod())) {
                 try {
-                    java.util.Map<String, Object> analytics = portfolioDAO.getAdvancedAnalytics(MOCK_USER_ID);
+                    int userId = getUserId(exchange);
+                    java.util.Map<String, Object> analytics = portfolioDAO.getAdvancedAnalytics(userId);
                     
                     JsonObject res = new JsonObject();
                     res.addProperty("topPerformerSymbol", (String) analytics.getOrDefault("best_stock", "N/A"));
@@ -110,8 +156,9 @@ public class ApiHandler {
                         .findFirst().orElse(null);
                         
                     if (stock != null) {
+                        int userId = getUserId(exchange);
                         Transaction t = new Transaction();
-                        t.setUserId(MOCK_USER_ID);
+                        t.setUserId(userId);
                         t.setStockSymbol(symbol);
                         t.setTransactionType(type);
                         t.setQuantity(qty);

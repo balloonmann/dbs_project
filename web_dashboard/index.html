@@ -57,8 +57,11 @@
                 </div>
 
                 <div class="user-profile">
-                    <div class="avatar">H</div>
-                    <span class="user-name">Harshit</span>
+                    <select id="user-selector" class="user-dropdown">
+                        <!-- Populated by JS -->
+                    </select>
+                    <button id="btn-new-user" class="btn-icon-plus" title="Add New User">+</button>
+                    <div class="avatar" id="current-user-avatar">H</div>
                 </div>
             </header>
 
@@ -217,6 +220,29 @@
             </div>
         </main>
     </div>
+    <!-- Create User Modal -->
+    <div id="user-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <h2>Create New Portfolio User</h2>
+            <form id="create-user-form">
+                <div class="input-group">
+                    <input type="text" id="new-username" required placeholder=" ">
+                    <label for="new-username">Full Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="new-email" required placeholder=" ">
+                    <label for="new-email">Email Address</label>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="new-phone" placeholder=" ">
+                    <label for="new-phone">Phone Number</label>
+                </div>
+                <button type="submit" class="btn-primary">Create User Profile</button>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
