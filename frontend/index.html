@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stock Portfolio Management & Analytics System — DBS Lab Project">
+    <title>DBS Project — Stock Portfolio System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-text">DBS Project</span>
+        </div>
+
+        <div class="sidebar-nav">
+            <button class="nav-item active" data-section="dashboard" id="nav-dashboard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" data-section="portfolio" id="nav-portfolio">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span>Portfolio</span>
+            </button>
+            <button class="nav-item" data-section="trade" id="nav-trade">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                <span>Trade</span>
+            </button>
+            <button class="nav-item" data-section="analytics" id="nav-analytics">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>Analytics</span>
+            </button>
+            <button class="nav-item" data-section="transactions" id="nav-transactions">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Transactions</span>
+            </button>
+            <button class="nav-item" data-section="watchlist" id="nav-watchlist">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Watchlist</span>
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-selector">
+                <label for="user-select">Active User</label>
+                <select id="user-select"></select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content" id="main-content">
+        <header class="content-header">
+            <div>
+                <h1 id="page-title">Dashboard</h1>
+                <p class="header-subtitle" id="page-subtitle">Overview of your portfolio performance</p>
+            </div>
+            <div class="header-actions">
+                <div class="balance-chip" id="balance-chip">
+                    <span class="balance-label">Cash Balance</span>
+                    <span class="balance-value" id="header-balance">₹0.00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard -->
+        <section class="content-section active" id="section-dashboard">
+            <div class="stats-grid" id="dashboard-stats"></div>
+            <div class="dashboard-grid">
+                <div class="card chart-card">
+                    <h3 class="card-title">Portfolio Allocation</h3>
+                    <div class="chart-container">
+                        <canvas id="allocation-chart" width="320" height="320"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Top Holdings</h3>
+                    <div id="top-holdings-list" class="holdings-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio -->
+        <section class="content-section" id="section-portfolio">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Your Holdings</h3>
+                    <button class="btn btn-primary btn-sm" onclick="navigateTo('trade')">+ New Trade</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="portfolio-table">
+                        <thead>
+                            <tr>
+                                <th>Ticker</th><th>Company</th><th>Sector</th><th>Qty</th>
+                                <th>Avg Cost</th><th>Current</th><th>Market Value</th><th>P&L</th><th>Return %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="portfolio-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trade -->
+        <section class="content-section" id="section-trade">
+            <div class="trade-layout">
+                <div class="card trade-form-card">
+                    <h3 class="card-title">Execute Trade</h3>
+                    <form id="trade-form" onsubmit="executeTrade(event)">
+                        <div class="form-group">
+                            <label for="trade-type">Trade Type</label>
+                            <div class="toggle-group">
+                                <button type="button" class="toggle-btn active" id="toggle-buy">BUY</button>
+                                <button type="button" class="toggle-btn sell" id="toggle-sell">SELL</button>
+                            </div>
+                            <input type="hidden" id="trade-type" value="BUY">
+                        </div>
+                        <div class="form-group">
+                            <label for="trade-ticker">Stock</label>
+                            <select id="trade-ticker" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trade-quantity">Quantity</label>
+                            <input type="number" id="trade-quantity" min="1" value="1" required>
+                        </div>
+                        <div class="trade-preview">
+                            <div class="preview-row"><span>Price per share</span><span id="preview-price">₹0.00</span></div>
+                            <div class="preview-row"><span>Total Amount</span><span id="preview-total" class="preview-total">₹0.00</span></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full" id="trade-submit-btn">Execute BUY Order</button>
+                    </form>
+                    <div id="trade-result" class="trade-result"></div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Available Stocks</h3>
+                    <div class="table-container">
+                        <table class="data-table" id="stocks-table">
+                            <thead><tr><th>Ticker</th><th>Company</th><th>Sector</th><th>Price</th><th>Day Range</th><th>P/E</th></tr></thead>
+                            <tbody id="stocks-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics -->
+        <section class="content-section" id="section-analytics">
+            <div class="analytics-grid">
+                <div class="card analytics-summary-card">
+                    <h3 class="card-title">Investment Metrics</h3>
+                    <div id="analytics-metrics"></div>
+                </div>
+                <div class="card chart-card">
+                    <h3 class="card-title">Sector Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="sector-chart" width="320" height="320"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Profit & Loss Report</h3>
+                <div class="pnl-tabs">
+                    <button class="tab-btn active" data-tab="unrealized" id="tab-unrealized">Unrealized P&L</button>
+                    <button class="tab-btn" data-tab="realized" id="tab-realized">Realized P&L</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="pnl-table">
+                        <thead id="pnl-thead"></thead>
+                        <tbody id="pnl-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="pnl-totals" id="pnl-totals"></div>
+            </div>
+        </section>
+
+        <!-- Transactions -->
+        <section class="content-section" id="section-transactions">
+            <div class="card">
+                <h3 class="card-title">Transaction History</h3>
+                <div class="table-container">
+                    <table class="data-table" id="txn-table">
+                        <thead><tr><th>Date</th><th>Ticker</th><th>Company</th><th>Type</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+                        <tbody id="txn-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Watchlist -->
+        <section class="content-section" id="section-watchlist">
+            <div class="card">
+                <h3 class="card-title">Your Watchlist</h3>
+                <div class="table-container">
+                    <table class="data-table" id="watchlist-table">
+                        <thead><tr><th>Ticker</th><th>Company</th><th>Sector</th><th>Current Price</th><th>Day Range</th><th>Alert Price</th><th>P/E Ratio</th><th>Added</th></tr></thead>
+                        <tbody id="watchlist-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast-container" id="toast-container"></div>
+    <script src="js/app.js"></script>
+</body>
+</html>
